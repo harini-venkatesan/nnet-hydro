@@ -6,8 +6,7 @@ from RandomProcess import SquaredExponential
 
 
 class Model:
-    def __init__(self, resolution, field_mean,
-                 field_stdev, mkl, lamb):
+    def __init__(self, resolution, field_mean, field_stdev, mkl, lamb):
         """
         This class is basically a wrapper
         around GwFlowSolver and RandomProcess.

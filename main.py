@@ -103,13 +103,17 @@ prop_cov = torch.diag(proposal_covariance)
 def multiple_runs(chain_id): 
     np.random.seed(chain_id)
     torch.manual_seed(chain_id)
-     
+    
     x0 = torch.tensor(true_parameters, dtype=torch.float32)
     print(x0)
     
+    # Reset random seed for consistent true_parameters
+    torch.manual_seed(data_seed)
+    my_models[-1].solve()
+    true_parameters = my_models[-1].random_process.parameters
     
     llh_levels = [level3, level2, level1]
-    N = 10000
+    N = 1000
     M = 5
     J = 2
     print('running mcmc for samples: ',N)
@@ -126,12 +130,11 @@ def multiple_runs(chain_id):
     print(samples_outer.shape)
     return samples_outer
 
- 
 if __name__ == '__main__':
 
-    nchains = 50
+    nchains = 10
     print("n = 10000, M = 5, J = 1")
-    with Pool(10) as p: 
+    with Pool(4) as p: 
         samples_test = p.starmap(multiple_runs, zip(range(nchains)))
         
     with open('samples/long-double-1', 'wb') as f: 
