@@ -5,7 +5,7 @@ import pickle
 from matplotlib.animation import FuncAnimation, PillowWriter
 
 # # Load the log-likelihood grid
-# with open('loglik_grid_parallel.pkl', 'rb') as f:
+# with open('loglik_grid_parallel-120.pkl', 'rb') as f:
 #     loglik_grid = pickle.load(f)
 
 # # Set up your parameter ranges (should match computation)
@@ -29,7 +29,7 @@ from matplotlib.animation import FuncAnimation, PillowWriter
 
 
 # Load the log-likelihood grid
-with open('loglik_grid_parallel.pkl', 'rb') as f:
+with open('loglik_grid_parallel-30.pkl', 'rb') as f:
     loglik_grid = pickle.load(f)
 
 # Set up your parameter ranges (should match computation)
