@@ -6,14 +6,12 @@ import torch.nn.functional as F
 import torch.optim as optim
 import matplotlib.pyplot as plt 
 
-with open('loglik_grid_parallel-30.pkl', 'rb') as f:
-    nnet_grid = pickle.load(f)
-
 with open('loglik_grid_parallel-120.pkl', 'rb') as f:
     loglik_grid = pickle.load(f)
 
+loglik_grid = np.array(loglik_grid)
 likelihood_grid = np.exp(loglik_grid)
-
+print(loglik_grid.shape)
 param_ranges = [np.linspace(-3, 3, 100) for _ in range(3)]  
 X, Y, Z = np.meshgrid(param_ranges[0], param_ranges[1], param_ranges[2], indexing='ij')
 
@@ -25,17 +23,6 @@ print("targets shape:", targets.shape)
 
 X_tensor = torch.tensor(features, dtype=torch.float32)
 y_tensor = torch.tensor(targets, dtype=torch.float32)
-
-# class SingleLayerNet(nn.Module):
-#     def __init__(self, input_size, hidden, output_size):
-#         super(SingleLayerNet, self).__init__()
-#         self.hidden_layer = nn.Linear(input_size, hidden)
-#         self.output_layer = nn.Linear(hidden, output_size)
-
-#     def forward(self, x):
-#         hidden_output = F.tanh(self.hidden_layer(x))
-#         y_pred = F.softplus(self.output_layer(hidden_output))
-#         return y_pred
 
 class SingleLayerNet(nn.Module):
     def __init__(self, input_size, hidden, output_size):
@@ -86,7 +73,7 @@ for epoch in range(epochs):
 
 torch.save(model.state_dict(), "single_layer_net_3dgrid.pt")
 
-z_index = np.abs(param_ranges[2]).argmin()
+z_index = np.abs(param_ranges[2][10])
 
 X_slice = X[:, :, z_index]
 Y_slice = Y[:, :, z_index]
