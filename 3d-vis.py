@@ -41,6 +41,7 @@ nnet_grid = np.exp(nnet_grid)
 global_min = np.nanmin(likelihood_grid)
 global_max = np.nanmax(likelihood_grid)
 
+print(likelihood_grid.shape)
 fig = plt.figure(figsize=(8, 6))
 # ax = fig.add_subplot(111, projection='3d')
 ax1 = fig.add_subplot(121, projection='3d')
@@ -52,9 +53,10 @@ ax2 = fig.add_subplot(122, projection='3d')
 # frames = np.linspace(0, 99, 20, dtype=int)
 # anim = FuncAnimation(fig, update_surface, frames=frames, interval=800, blit=False)
 
-with open('nnet-grid-2.pkl', 'rb') as f:
+with open('predictions', 'rb') as f:
     nnet_grid1 = pickle.load(f)
 
+print(nnet_grid1.shape)
 param_ranges = [np.linspace(-3, 3, 100) for _ in range(3)]
 
 X, Y = np.meshgrid(param_ranges[0], param_ranges[1], indexing='ij')

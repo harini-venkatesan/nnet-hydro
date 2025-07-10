@@ -2,13 +2,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pickle 
 
-with open('samples/long-double-1', 'rb') as f:
+with open('june-samples/AEM-single', 'rb') as f:
     samples = pickle.load(f)
 
 samples = np.array(samples)
 print(samples.shape)
 
-# samples = np.transpose(samples, (0, 2, 1))
+samples = np.transpose(samples, (0, 2, 1))
 samples = samples[10]
 print(samples.shape)  # For sanity check
 
