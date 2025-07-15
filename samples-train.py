@@ -13,16 +13,17 @@ num_runs = 100
 num_samples = 10000
 num_params = 3
 
-with open('june-samples/mcmc-long-1', 'rb') as f:
+with open('june-samples/mcmc-long-test-1', 'rb') as f:
     samples = pickle.load(f)
 
-with open('june-samples/llh_values-1.pkl', 'rb') as f:
+with open('june-samples/llh_values-long-1.pkl', 'rb') as f:
     llh_vals = pickle.load(f)
 
 # Example parameters: fill these with your actual data
 # features = np.random.uniform(-3, 3, (num_samples, num_params)).astype(np.float32)
 features = np.array(samples)
-features = features[0]
+# features = np.transpose(features)
+# features = features[0]
 # targets = np.exp(-np.sum(features**2, axis=-1, keepdims=True))  # just an example function
 targets = np.array(llh_vals)
 # ---- Flatten across runs for training ----
@@ -36,23 +37,37 @@ print(features.shape)
 X_tensor = torch.tensor(features, dtype=torch.float32)
 y_tensor = torch.tensor(targets_flat, dtype=torch.float32)
 
-# ---- Define your network ----
-class SingleLayerNet(nn.Module):
-    def __init__(self, input_size, hidden, output_size):
-        super(SingleLayerNet, self).__init__()
-        self.hidden_layer = nn.Linear(input_size, hidden)
-        self.output_layer = nn.Linear(hidden, output_size)
-    def forward(self, x):
-        hidden_output = F.tanh(self.hidden_layer(x))
-        y_pred = F.softplus(self.output_layer(hidden_output))
-        return y_pred
+class SimpleNet(nn.Module):
+    def __init__(self):
+        super(SimpleNet, self).__init__()
+        self.layers = nn.Sequential(
+            nn.Linear(3, 124),
+            nn.ReLU(),
+            nn.Linear(124, 124),
+            nn.ReLU(),
+            nn.Linear(124, 124),
+            nn.ReLU(),
+            nn.Linear(124, 1))
+        # nn.Softplus())        
+        self._init_weights()
 
-model = SingleLayerNet(input_size=3, hidden=64, output_size=1)
+    def _init_weights(self):
+        for layer in self.layers:
+            if isinstance(layer, nn.Linear):
+                nn.init.xavier_uniform_(layer.weight)
+                if layer.bias is not None:
+                    nn.init.zeros_(layer.bias)
+
+
+    def forward(self, x):
+        return self.layers(x)
+    
+model = SimpleNet()
 criterion = nn.MSELoss()
 optimizer = optim.Adam(model.parameters(), lr=0.01)
 
 # ---- Training Loop ----
-epochs = 200
+epochs = 500
 batch_size = 64
 for epoch in range(epochs):
     permutation = torch.randperm(X_tensor.size(0))
@@ -81,7 +96,7 @@ with torch.no_grad():
     preds = model(features_tensor).cpu().numpy().reshape(100, 100, 100)
 
 print(preds.shape)
-with open('predictions', 'wb') as f: 
+with open('predictions-mcmc', 'wb') as f: 
     pickle.dump(preds, f)
 
 # fig, ax = plt.subplots(figsize=(7, 5))
