@@ -2,15 +2,15 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pickle 
 
-with open('../june-samples/single-1', 'rb') as f:
+with open('../june-samples/batch-single-2', 'rb') as f:
     samples = pickle.load(f)
 
 samples = np.array(samples)
 print(samples.shape)
 # samples = np.transpose(samples)
 # samples = np.transpose(samples, (0, 2, 1))
-samples = samples[1]
-print(samples.shape)  
+# samples = samples[1]
+# print(samples.shape)  
 mean_values = np.mean(samples, axis=0)
 
 # Calculate mean for each parameter across all runs and samples

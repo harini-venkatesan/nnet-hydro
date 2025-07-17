@@ -1,3 +1,0 @@
-Means for each parameter (MCMC): [-0.55524645  0.5261065   0.11538391]
-Means for each parameter (Single): [-0.46030288  0.46867962  0.07775875]
-Means for each parameter (AEM): [-0.45142989  0.45396457  0.06787153]
