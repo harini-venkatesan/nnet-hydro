@@ -52,7 +52,7 @@ def update_surface(k):
     ax2.clear()
     
     # Difference surface on ax1
-    Z_diff = likelihood_grid1[:, :, k]
+    Z_diff = likelihood_grid2[:, :, k]
     surf1 = ax1.plot_surface(X, Y, Z_diff, cmap='viridis', edgecolor='none')
     ax1.set_xlabel('parameter 1')
     ax1.set_ylabel('parameter 2')
@@ -61,7 +61,7 @@ def update_surface(k):
     ax1.set_zlim(global_min, global_max)
     
     # nnet surface on ax2
-    Z_nnet = nnet_grid1[:, :, k]
+    Z_nnet = nnet_grid1[:, :, k] 
     surf2 = ax2.plot_surface(X, Y, Z_nnet, cmap='viridis', edgecolor='none')
     ax2.set_xlabel('parameter 1')
     ax2.set_ylabel('parameter 2')
@@ -77,10 +77,10 @@ anim = FuncAnimation(fig, update_surface, frames=frames, interval=800, blit=Fals
 
 
 #save as gif
-# anim.save('trained-mcmc.gif', writer=PillowWriter(fps=2))
+# anim.save('batch.gif', writer=PillowWriter(fps=2))
 
 #save as mp4
-# anim.save('trained-single.mp4', writer='ffmpeg', fps=2)
+# anim.save('batch.mp4', writer='ffmpeg', fps=2)
 
 plt.show()
 
